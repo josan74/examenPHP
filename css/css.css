@@ -1,0 +1,45 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+#cabecera {
+    width: 100%;
+    background-color: #db3b5d;
+    height: 50px;
+    padding-top: 10px;
+    color: white;
+}
+#seccion {
+    height: 100%;
+}
+
+#actualizar {
+    padding: 25px;
+    height: 150px;
+}
+
+#separacion {
+    width: 100%;
+    background-color: #db3b5d;
+    height: 10px;
+}
+
+#formulario{
+    width:350px; text-align: right;
+}
+
+#foto{
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    background-color: #cacaca;
+    width: 90px;
+    height: 120px;
+    float: left;
+}
+
+#listar {
+    padding: 25px;
+    height: 100%;
+}
+
