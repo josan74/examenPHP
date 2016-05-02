@@ -3,14 +3,10 @@ require_once "consultas.php";
 session_start();
 $fotos = new consultas();
 $a_users = $fotos->ejecutar("Select * from tabla");
-$a_user = [[
-    "nombre" => "",
-    "apellidos" => "",
-    "direccion" => "",
-    "localidad" => "",   
-]];
 
-
+if (isset($_REQUEST['nombre'])) {
+    print_r($_REQUEST);
+}
 ?>
 
 <!DOCTYPE html>
@@ -22,42 +18,35 @@ $a_user = [[
         <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed' rel='stylesheet' type='text/css'>
     </head>
     <body>
-        <?php 
-        if (isset($_REQUEST['dni'])) {   
+        <?php
+        if (isset($_REQUEST['dni'])) {
             // Realizamos una consulta con el dni pulsado
-            $dni=$_POST['dni'];          
+            $dni = $_POST['dni'];
             $a_user = $fotos->ejecutar("Select * from tabla where dni='$dni'");
-            
-            //print_r($_REQUEST);
         }
         ?>
         <header id="cabecera">
             &nbsp;&nbsp;&nbsp;DESARROLLO EN ENTORNO SERVIDOR
         </header>
-        <?php
-        
-        if(isset($_POST['submit'])){
-            
-        }
-
-?>
         <section id="seccion">
             <div id="actualizar">
                 <div id="foto">
-                    <img src="fotos/<?php //echo $row['dni']; ?>"/>
+                    <?php
+                         if(isset($_REQUEST['submit'])){
+                    ?>
+                    <img src="fotos/<?php echo $a_user[0]['dni'].".jpg";  ?>" width="90" height="120"/>
+                    <?php
+                         }
+                    ?>
                 </div>
-                <?php 
-                // foreach ($a_user as $row) {          
-               
-                
-                ?>
+
                 <div id="formulario">                   
-                    Nombre: <input type="text" name="nombre" id="nombre" value="<?php echo $a_user[0]['nombre']; ?>"/> <br />
-                    Apellidos: <input type="text" name="apellidos" id="apellidos" value="<?php echo $a_user[0]['apellidos']; ?>" /><br />
-                    Dirección: <input type="text" name="direccion" id="direccion" value="<?php echo $a_user[0]['direccion']; ?>" /><br />
-                    Localidad: <input type="text" name="localidad" id="localidad" value="<?php echo $a_user[0]['localidad']; ?>"/><br />
-                    <input type="submit" id="submit" value="Actualizar" />
-             
+                    Nombre: <input type="text" name="nombre" id="nombre" value="<?php  if(isset($_REQUEST['submit'])) echo $a_user[0]['nombre']; ?>"/> <br />
+                    Apellidos: <input type="text" name="apellidos" id="apellidos" value="<?php if(isset($_REQUEST['submit']))echo $a_user[0]['apellidos']; ?>" /><br />
+                    Dirección: <input type="text" name="direccion" id="direccion" value="<?php if(isset($_REQUEST['submit']))echo $a_user[0]['direccion']; ?>" /><br />
+                    Localidad: <input type="text" name="localidad" id="localidad" value="<?php if(isset($_REQUEST['submit']))echo $a_user[0]['localidad']; ?>"/><br /> 
+                         <input type="submit" id="submit" value="Actualizar" <?php if(!isset($_REQUEST['submit'])) echo "disabled"; ?> />
+                    
                 </div>
             </div>
 
@@ -65,11 +54,12 @@ $a_user = [[
             <div id="separacion"></div>
             <div id="listar">
                 <table class='separa'>
-                    <?php 
-                        $i=0;
-                        foreach ($a_users as $row) { ?> 
-                           <!--Creamos un formulario por cada registro-->
-                           <form id="formula" method="post" name="form<?php echo $i; ?>" action="index.php">
+<?php
+$i = 0;
+foreach ($a_users as $row) {
+    ?> 
+                        <!--Creamos un formulario por cada registro-->
+                        <form id="formula" method="post" name="form<?php echo $i; ?>" action="index.php">
 
                             <tr>
                                 <td><?php echo $row['dni']; ?></td>
@@ -78,14 +68,15 @@ $a_user = [[
                                 <td><?php echo $row['direccion']; ?></td>
                                 <td><?php echo $row['localidad']; ?></td>
                                 <!--guardamos el valor del dni que vamos a pulsar-->
-                                <input type="hidden" name="dni" id="<?php echo $i; ?>" value="<?php echo $row['dni']; ?>" />                            
-                                <td><input type="submit" id="<?php echo $i; ?>" value="Cambiar" />  </td>
+                            <input type="hidden" name="dni" id="<?php echo $i; ?>" value="<?php echo $row['dni']; ?>" />                            
+                            <td><input type="submit" id="<?php echo $i; ?>" value="Cambiar" name="submit" />  </td>
                             </tr>
-                           </form>
-                    <?php 
-                    $i++;
-                        } ?>
-                  
+                        </form>
+    <?php
+    $i++;
+}
+?>
+
                 </table>
             </div>
         </section>
